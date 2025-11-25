@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "12216600896",
+    "project_id": "login-dan-register-fireb-bc103",
+    "storage_bucket": "login-dan-register-fireb-bc103.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:12216600896:android:475fb52251515481a892a5",
+        "android_client_info": {
+          "package_name": "com.apps.logindanregisterfirebase"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBO8e58diaFJa9FfCNHLaGtSCxkVEWv9rI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
