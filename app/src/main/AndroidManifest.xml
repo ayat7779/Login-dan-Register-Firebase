@@ -14,13 +14,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.LoginDanRegisterFirebase">
         <activity
-            android:name=".Admin"
+            android:name=".Admin.Admin"
             android:exported="false" />
         <activity
-            android:name=".Register"
+            android:name=".LoginDanRegister.Register"
             android:exported="false" />
         <activity
-            android:name=".Login"
+            android:name=".LoginDanRegister.Login"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

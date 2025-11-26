@@ -1,4 +1,4 @@
-package com.apps.logindanregisterfirebase;
+package com.apps.logindanregisterfirebase.LoginDanRegister;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,6 +14,9 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.apps.logindanregisterfirebase.Admin.Admin;
+import com.apps.logindanregisterfirebase.MainActivity;
+import com.apps.logindanregisterfirebase.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -61,6 +64,10 @@ public class Login extends AppCompatActivity {
 
                 if (username.isEmpty() || password.isEmpty()) {
                     Toast.makeText(getApplicationContext(), "Username atau password Salah!!!", Toast.LENGTH_SHORT).show();
+                }else if (username.equals("admin") && password.equals("admin")){
+                    Toast.makeText(getApplicationContext(), "Login Admin Berhasil!!!", Toast.LENGTH_SHORT).show();
+                    Intent masuk = new Intent(getApplicationContext(), Admin.class);
+                    startActivity(masuk);
                 }else{
                     database.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
