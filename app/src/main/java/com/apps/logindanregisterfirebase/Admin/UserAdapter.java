@@ -1,6 +1,7 @@
 package com.apps.logindanregisterfirebase.Admin;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,9 +39,9 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.MyViewHolder> 
     public void onBindViewHolder(@NonNull UserAdapter.MyViewHolder holder, int position) {
 
         final User item = mlist.get(position);
-        holder.tvUsername.setText("Username : " + item.getUsername());
-        holder.tvNoHp.setText("No HP : " + item.getNoHp());
-        holder.tvPassword.setText("Password : " + item.getPassword());
+        holder.tvUsername.setText(String.format("Username : %s", item.getUsername()));
+        holder.tvNoHp.setText(String.format("No HP : %s", item.getNoHp()));
+        holder.tvPassword.setText(String.format("Password : %s", item.getPassword()));
 
         holder.btnHapus.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -52,6 +53,18 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.MyViewHolder> 
         holder.btnEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                String username = item.getUsername();
+                String noHp = item.getNoHp();
+                String password = item.getPassword();
+
+                Intent edit = new Intent(context, EditDataUser.class);
+                edit.putExtra("username", username);
+                edit.putExtra("noHp", noHp);
+                edit.putExtra("password", password);
+                context.startActivity(edit);
+
+
 
             }
         });

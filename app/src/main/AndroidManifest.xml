@@ -14,6 +14,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.LoginDanRegisterFirebase">
         <activity
+            android:name=".Admin.EditDataUser"
+            android:exported="false" />
+        <activity
             android:name=".Admin.Admin"
             android:exported="false" />
         <activity
@@ -30,7 +33,7 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
     </application>
 
 </manifest>

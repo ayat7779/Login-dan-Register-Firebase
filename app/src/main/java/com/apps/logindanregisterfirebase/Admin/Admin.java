@@ -1,5 +1,6 @@
 package com.apps.logindanregisterfirebase.Admin;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -57,6 +58,7 @@ public class Admin extends AppCompatActivity {
         });
 
         database = FirebaseDatabase.getInstance().getReference("users");
+
         rvUser = findViewById(R.id.rvUser);
         rvUser.setHasFixedSize(true);
 
@@ -68,7 +70,8 @@ public class Admin extends AppCompatActivity {
     }
 
     private void tampilData() {
-        database.addListenerForSingleValueEvent(new ValueEventListener() {
+        database.addValueEventListener(new ValueEventListener() {
+            @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 arrayList = new ArrayList<>();
