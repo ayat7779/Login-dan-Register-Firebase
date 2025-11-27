@@ -58,8 +58,9 @@ public class Register extends AppCompatActivity {
                     database.child(username).child("username").setValue(username);
                     database.child(username).child("noHp").setValue(noHp);
                     database.child(username).child("password").setValue(password);
+                    database.child(username).child("status").setValue(0);
 
-                    Toast.makeText(getApplicationContext(), "Register Berhasil!!!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Register Berhasil!!! Silakan tunggu aktivasi dari admin.", Toast.LENGTH_SHORT).show();
                     Intent register = new Intent(getApplicationContext(), Login.class);
                     startActivity(register);
                 }

@@ -14,13 +14,14 @@
         android:id="@+id/tvRegister"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:layout_marginTop="64dp"
         android:layout_marginBottom="16dp"
         android:text="Register"
+        android:textColor="@color/cardview_light_background"
         android:textSize="28sp"
         android:textStyle="bold"
-        android:layout_gravity="center"
-        tools:ignore="HardcodedText" />
+        tools:ignore="HardcodedText,TextContrastCheck" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
@@ -31,6 +32,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="8dp">
+
         <EditText
             android:id="@+id/etUsername"
             android:layout_width="match_parent"
@@ -40,8 +42,8 @@
             android:hint="Username"
             android:inputType="text"
             android:minHeight="48dp"
-            android:textColorHint="#757575"
-            tools:ignore="Autofill,HardcodedText" />
+            android:textColorHint="#FFFFFF"
+            tools:ignore="Autofill,HardcodedText,TextContrastCheck,VisualLintTextFieldSize" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -54,6 +56,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="8dp">
+
         <EditText
             android:id="@+id/etPassword"
             android:layout_width="match_parent"
@@ -64,7 +67,7 @@
             android:inputType="text|textPassword"
             android:minHeight="48dp"
             android:textColorHint="#757575"
-            tools:ignore="Autofill,HardcodedText" />
+            tools:ignore="Autofill,HardcodedText,TextContrastCheck,VisualLintTextFieldSize" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -76,6 +79,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="8dp">
+
         <EditText
             android:id="@+id/etNoHp"
             android:layout_width="match_parent"
@@ -86,20 +90,20 @@
             android:inputType="number"
             android:maxLength="12"
             android:minHeight="48dp"
-            android:textColorHint="#757575"
-            tools:ignore="Autofill,HardcodedText,TextFields" />
+            android:textColorHint="#FFFFFF"
+            tools:ignore="Autofill,HardcodedText,TextFields,TextContrastCheck,VisualLintTextFieldSize" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
         android:id="@+id/btnRegister"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
         android:backgroundTint="#F4511E"
         android:text="Register"
         android:textColor="#212121"
-        android:layout_gravity="center"
-        tools:ignore="HardcodedText,VisualLintButtonSize" />
+        tools:ignore="HardcodedText,VisualLintButtonSize,DuplicateSpeakableTextCheck" />
 </LinearLayout>

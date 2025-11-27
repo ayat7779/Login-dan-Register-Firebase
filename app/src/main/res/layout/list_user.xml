@@ -58,7 +58,8 @@
                     android:text="Hapus"
                     android:textStyle="bold"
                     android:backgroundTint="#D50000"
-                    tools:ignore="ButtonStyle,HardcodedText" />
+                    tools:ignore="ButtonStyle,HardcodedText,VisualLintButtonSize"
+                    android:layout_margin="8dp"/>
 
                 <Button
                     android:id="@+id/btnEdit"
@@ -68,7 +69,8 @@
                     android:text="Edit"
                     android:textStyle="bold"
                     android:backgroundTint="#304FFE"
-                    tools:ignore="ButtonStyle,HardcodedText" />
+                    tools:ignore="ButtonStyle,HardcodedText,VisualLintButtonSize"
+                    android:layout_margin="8dp"/>
 
             </LinearLayout>
         </LinearLayout>
