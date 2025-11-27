@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#42B357"
+    android:background="@drawable/bcg_02"
+    android:orientation="vertical"
     tools:context=".LoginDanRegister.Register">
 
     <TextView
@@ -13,73 +15,91 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="64dp"
+        android:layout_marginBottom="16dp"
         android:text="Register"
         android:textSize="28sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_gravity="center"
         tools:ignore="HardcodedText" />
 
-    <EditText
-        android:id="@+id/etUsername"
-        android:layout_width="363dp"
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:background="@color/white"
-        android:ems="10"
-        android:hint="Username"
-        android:inputType="text"
-        android:minHeight="48dp"
-        android:textColorHint="#757575"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvRegister"
-        tools:ignore="Autofill,HardcodedText" />
+        app:counterEnabled="true"
+        app:counterMaxLength="10"
+        tools:ignore="MissingConstraints"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="8dp">
+        <EditText
+            android:id="@+id/etUsername"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:ems="10"
+            android:hint="Username"
+            android:inputType="text"
+            android:minHeight="48dp"
+            android:textColorHint="#757575"
+            tools:ignore="Autofill,HardcodedText" />
+    </com.google.android.material.textfield.TextInputLayout>
 
-    <EditText
-        android:id="@+id/etPassword"
-        android:layout_width="363dp"
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:background="@color/white"
-        android:ems="10"
-        android:hint="Password"
-        android:inputType="text|textPassword"
-        android:minHeight="48dp"
-        android:textColorHint="#757575"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etNoHp"
-        tools:ignore="Autofill,HardcodedText" />
+        app:counterEnabled="true"
+        app:counterMaxLength="10"
+        app:passwordToggleEnabled="true"
+        tools:ignore="MissingConstraints"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="8dp">
+        <EditText
+            android:id="@+id/etPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:ems="10"
+            android:hint="Password"
+            android:inputType="text|textPassword"
+            android:minHeight="48dp"
+            android:textColorHint="#757575"
+            tools:ignore="Autofill,HardcodedText" />
+    </com.google.android.material.textfield.TextInputLayout>
 
-    <EditText
-        android:id="@+id/etNoHp"
-        android:layout_width="363dp"
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:background="@color/white"
-        android:ems="10"
-        android:hint="NoHP"
-        android:inputType="text"
-        android:minHeight="48dp"
-        android:textColorHint="#757575"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etUsername"
-        tools:ignore="Autofill,HardcodedText,TextFields" />
+        app:counterEnabled="true"
+        app:counterMaxLength="12"
+        tools:ignore="MissingConstraints"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="8dp">
+        <EditText
+            android:id="@+id/etNoHp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:ems="10"
+            android:hint="NoHP"
+            android:inputType="number"
+            android:maxLength="12"
+            android:minHeight="48dp"
+            android:textColorHint="#757575"
+            tools:ignore="Autofill,HardcodedText,TextFields" />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <Button
         android:id="@+id/btnRegister"
-        android:layout_width="363dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
         android:backgroundTint="#F4511E"
         android:text="Register"
         android:textColor="#212121"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etPassword"
+        android:layout_gravity="center"
         tools:ignore="HardcodedText,VisualLintButtonSize" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
