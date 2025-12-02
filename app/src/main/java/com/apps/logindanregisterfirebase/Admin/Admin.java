@@ -4,10 +4,13 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -28,6 +31,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Admin extends AppCompatActivity {
     private ImageView ivKeluar;
@@ -114,6 +118,34 @@ public class Admin extends AppCompatActivity {
                 // Handle error
             }
         });
+    }
+
+    // Admin.java - Tambah method baru
+    public void promoteToAdmin(User user) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Promosi ke Admin")
+                .setMessage("Promosikan " + user.getUsername() + " menjadi admin?")
+                .setPositiveButton("Ya", (dialog, which) -> {
+                    DatabaseReference userRef = database.child(user.getUid());
+
+                    HashMap<String, Object> updates = new HashMap<>();
+                    updates.put("role", "admin");
+                    updates.put("status", 1);
+
+                    userRef.updateChildren(updates)
+                            .addOnSuccessListener(aVoid -> {
+                                Toast.makeText(Admin.this,
+                                        user.getUsername() + " sekarang adalah admin",
+                                        Toast.LENGTH_SHORT).show();
+                            })
+                            .addOnFailureListener(e -> {
+                                Toast.makeText(Admin.this,
+                                        "Gagal: " + e.getMessage(),
+                                        Toast.LENGTH_SHORT).show();
+                            });
+                })
+                .setNegativeButton("Tidak", null)
+                .show();
     }
 
     @Override

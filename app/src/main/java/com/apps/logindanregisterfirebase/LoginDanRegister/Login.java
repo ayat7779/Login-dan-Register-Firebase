@@ -3,6 +3,7 @@ package com.apps.logindanregisterfirebase.LoginDanRegister;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -63,7 +64,8 @@ public class Login extends AppCompatActivity {
 
         // Check if user is already logged in
         if (sessionManager.isLoggedIn()) {
-            redirectBasedOnRole();
+            String role = sessionManager.getUserRole();
+            redirectBasedOnRole(role); // PERBAIKAN: Tambah parameter
             return;
         }
 
@@ -162,6 +164,14 @@ public class Login extends AppCompatActivity {
                             Toast.makeText(Login.this,
                                     "Email belum terdaftar",
                                     Toast.LENGTH_SHORT).show();
+                        } else if (errorMessage.contains("badly formatted")) {
+                            Toast.makeText(Login.this,
+                                    "Format email tidak valid",
+                                    Toast.LENGTH_SHORT).show();
+                        } else if (errorMessage.contains("network error")) {
+                            Toast.makeText(Login.this,
+                                    "Tidak ada koneksi internet",
+                                    Toast.LENGTH_SHORT).show();
                         } else {
                             Toast.makeText(Login.this,
                                     "Login gagal: " + errorMessage,
@@ -197,6 +207,9 @@ public class Login extends AppCompatActivity {
                     String role = snapshot.child("role").getValue(String.class);
                     Integer status = snapshot.child("status").getValue(Integer.class);
 
+                    // Debug log
+                    Log.d("Login", "Role: " + role + ", Status: " + status);
+
                     // Check account status
                     if (status == null || status == 0) {
                         // Account pending activation
@@ -220,13 +233,13 @@ public class Login extends AppCompatActivity {
                             userId, email, username, role, noHp, rememberMe
                     );
 
-                    // Redirect based on role
-                    redirectBasedOnRole();
+                    // Redirect based on role - PERBAIKAN: Panggil dengan parameter
+                    redirectBasedOnRole(role);
 
                 } else {
                     // User data not found in database (should not happen)
                     Toast.makeText(Login.this,
-                            "Data user tidak ditemukan",
+                            "Data user tidak ditemukan di database",
                             Toast.LENGTH_SHORT).show();
                     mAuth.signOut();
                 }
@@ -242,10 +255,10 @@ public class Login extends AppCompatActivity {
         });
     }
 
-    private void redirectBasedOnRole() {
-        String role = sessionManager.getUserRole();
-
+    // PERBAIKAN: Method ini HARUS menerima parameter String role
+    private void redirectBasedOnRole(String role) {
         Intent intent;
+
         if ("admin".equals(role)) {
             intent = new Intent(Login.this, Admin.class);
             Toast.makeText(Login.this, "Login Admin Berhasil!", Toast.LENGTH_SHORT).show();
@@ -262,7 +275,7 @@ public class Login extends AppCompatActivity {
     private void showForgotPasswordDialog() {
         android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
         builder.setTitle("Lupa Password")
-                .setMessage("Masukkan email Anda untuk reset password:")
+                .setMessage("Masukkan email yang terdaftar:")
 
                 .setView(getLayoutInflater().inflate(R.layout.dialog_forgot_password, null))
 
@@ -308,7 +321,8 @@ public class Login extends AppCompatActivity {
         super.onStart();
         // Auto-login if session exists
         if (sessionManager.isLoggedIn()) {
-            redirectBasedOnRole();
+            String role = sessionManager.getUserRole();
+            redirectBasedOnRole(role); // PERBAIKAN: Tambah parameter
         }
     }
 }

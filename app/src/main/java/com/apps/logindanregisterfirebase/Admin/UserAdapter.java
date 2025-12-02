@@ -99,6 +99,22 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.MyViewHolder> 
                 }
             });
         }
+
+        Button btnPromote = holder.itemView.findViewById(R.id.btnPromote);
+        if (btnPromote != null) {
+            btnPromote.setVisibility(View.VISIBLE);
+            btnPromote.setOnClickListener(v -> {
+                // Panggil method promote dari activity
+                if (context instanceof Admin) {
+                    ((Admin) context).promoteToAdmin(item);
+                }
+            });
+
+            // Sembunyikan jika sudah admin
+            if ("admin".equals(item.getRole())) {
+                btnPromote.setVisibility(View.GONE);
+            }
+        }
     }
 
     private String getStatusText(int status) {
