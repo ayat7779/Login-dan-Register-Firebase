@@ -1,5 +1,7 @@
 [versions]
 agp = "8.13.1"
+firebaseAuth = "22.3.0"
+firebaseDatabaseVersion = "20.3.0"
 junit = "4.13.2"
 junitVersion = "1.1.5"
 espressoCore = "3.5.1"
@@ -13,6 +15,8 @@ googleGmsGoogleServices = "4.4.4"
 firebaseDatabase = "22.0.1"
 
 [libraries]
+firebase-auth = { module = "com.google.firebase:firebase-auth", version.ref = "firebaseAuth" }
+firebase-database-v2030 = { module = "com.google.firebase:firebase-database", version.ref = "firebaseDatabaseVersion" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }

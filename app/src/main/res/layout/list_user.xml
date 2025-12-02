@@ -1,79 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical">
+    android:layout_margin="8dp"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="4dp">
 
-    <androidx.cardview.widget.CardView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        app:cardCornerRadius="15dp"
-        app:cardElevation="10dp">
+        android:orientation="vertical"
+        android:padding="16dp">
 
+        <!-- User Info -->
+        <TextView
+            android:id="@+id/tvUsername"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Username : "
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="4dp"/>
+
+        <TextView
+            android:id="@+id/tvEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Email : "
+            android:layout_marginBottom="4dp"/>
+
+        <TextView
+            android:id="@+id/tvNoHp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="No HP : "
+            android:layout_marginBottom="4dp"/>
+
+        <TextView
+            android:id="@+id/tvStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Status : "
+            android:layout_marginBottom="4dp"/>
+
+        <TextView
+            android:id="@+id/tvRole"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Role : "
+            android:layout_marginBottom="16dp"/>
+
+        <!-- Action Buttons -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_margin="10dp">
+            android:orientation="horizontal"
+            android:gravity="center">
 
-            <TextView
-                android:id="@+id/tvUsername"
-                android:layout_width="match_parent"
+            <Button
+                android:id="@+id/btnEdit"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:text="Username"
-                tools:ignore="HardcodedText" />
+                android:layout_weight="1"
+                android:text="Edit"
+                android:layout_marginEnd="8dp"
+                android:backgroundTint="@color/primary"/>
 
-            <TextView
-                android:id="@+id/tvNoHp"
-                android:layout_width="match_parent"
+            <Button
+                android:id="@+id/btnHapus"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:text="NoHp"
-                tools:ignore="HardcodedText" />
+                android:layout_weight="1"
+                android:text="Hapus"
+                android:layout_marginStart="8dp"
+                android:backgroundTint="@color/error"/>
 
-            <TextView
-                android:id="@+id/tvPassword"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:text="Password"
-                tools:ignore="HardcodedText" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_margin="10dp">
-
-                <Button
-                    android:id="@+id/btnHapus"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Hapus"
-                    android:textStyle="bold"
-                    android:backgroundTint="#D50000"
-                    tools:ignore="ButtonStyle,HardcodedText,VisualLintButtonSize"
-                    android:layout_margin="8dp"/>
-
-                <Button
-                    android:id="@+id/btnEdit"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Edit"
-                    android:textStyle="bold"
-                    android:backgroundTint="#304FFE"
-                    tools:ignore="ButtonStyle,HardcodedText,VisualLintButtonSize"
-                    android:layout_margin="8dp"/>
-
-            </LinearLayout>
         </LinearLayout>
-    </androidx.cardview.widget.CardView>
 
-</LinearLayout>
+        <!-- Activation Button -->
+        <Button
+            android:id="@+id/btnAktifasi"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Aktifkan/Nonaktifkan"
+            android:layout_marginTop="8dp"
+            android:backgroundTint="@color/warning"/>
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

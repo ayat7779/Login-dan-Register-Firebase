@@ -45,4 +45,10 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+
+    // Firebase dependencies
+    implementation (libs.firebase.auth)
+    implementation (libs.firebase.database.v2030)
+
+
 }

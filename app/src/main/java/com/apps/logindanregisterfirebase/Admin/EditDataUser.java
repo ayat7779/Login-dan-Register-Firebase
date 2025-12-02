@@ -21,10 +21,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.HashMap;
 
 public class EditDataUser extends AppCompatActivity {
-
-    private EditText etUsername, etPassword, etNoHp;
+    private EditText etUsername, etEmail, etPassword, etNoHp;
     private Button btnSave, btnBatal;
-    private String username, noHp, password;
+    private String uid, username, email, noHp, password;
     private DatabaseReference database = FirebaseDatabase.getInstance().getReference("users");
 
     @Override
@@ -39,46 +38,106 @@ public class EditDataUser extends AppCompatActivity {
         });
 
         etUsername = findViewById(R.id.etUsername);
+        etEmail = findViewById(R.id.etEmail);
         etPassword = findViewById(R.id.etPassword);
         etNoHp = findViewById(R.id.etNoHp);
         btnSave = findViewById(R.id.btnSave);
         btnBatal = findViewById(R.id.btnBatal);
 
-        if (getIntent().hasExtra("username") && getIntent().hasExtra("noHp") && getIntent().hasExtra("password")) {
+        // Ambil data dari intent
+        if (getIntent().hasExtra("uid")) {
+            uid = getIntent().getStringExtra("uid");
             username = getIntent().getStringExtra("username");
+            email = getIntent().getStringExtra("email");
             noHp = getIntent().getStringExtra("noHp");
             password = getIntent().getStringExtra("password");
+        } else {
+            // Jika tidak ada uid, kembali
+            Toast.makeText(this, "Data user tidak valid", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
         }
 
+        // Set nilai ke EditText
         etUsername.setText(username);
+        etEmail.setText(email);
         etNoHp.setText(noHp);
         etPassword.setText(password);
+
+        // Nonaktifkan edit email (karena email adalah primary key di Firebase Auth)
+        etEmail.setEnabled(false);
+
+        // Jika ingin mengedit password, perlu implementasi Firebase Auth
+        // Untuk sekarang, sembunyikan atau nonaktifkan
+        etPassword.setEnabled(false);
 
         btnBatal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(getApplicationContext(), Admin.class));
+                finish();
             }
         });
 
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String noHpBaru = etNoHp.getText().toString();
-                String passwordBaru = etPassword.getText().toString();
+                String usernameBaru = etUsername.getText().toString().trim();
+                String noHpBaru = etNoHp.getText().toString().trim();
 
-                HashMap hashMap = new HashMap<>();
+                HashMap<String, Object> hashMap = new HashMap<>();
+                hashMap.put("username", usernameBaru); // jika boleh edit username
                 hashMap.put("noHp", noHpBaru);
-                hashMap.put("password", passwordBaru);
 
-                database.child(username).updateChildren(hashMap).addOnSuccessListener(new OnSuccessListener() {
-                    @Override
-                    public void onSuccess(Object o) {
-                        Toast.makeText(getApplicationContext(), "Update Berhasil!!", Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(getApplicationContext(), Admin.class));
-                    }
-                });
+                // Validasi input
+                if (usernameBaru.isEmpty()) {
+                    etUsername.setError("Username tidak boleh kosong");
+                    etUsername.requestFocus();
+                    return;
+                }
+
+                if (noHpBaru.isEmpty()) {
+                    etNoHp.setError("Nomor HP tidak boleh kosong");
+                    etNoHp.requestFocus();
+                    return;
+                }
+
+                // Update data ke Firebase
+                updateUserData(usernameBaru, noHpBaru);
             }
         });
+    }
+
+    private void updateUserData(String usernameBaru, String noHpBaru) {
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("username", usernameBaru);
+        hashMap.put("noHp", noHpBaru);
+
+        database.child(uid).updateChildren(hashMap)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Toast.makeText(getApplicationContext(),
+                                "Data user berhasil diupdate!",
+                                Toast.LENGTH_SHORT).show();
+
+                        Intent intent = new Intent(getApplicationContext(), Admin.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
+                        finish();
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(getApplicationContext(),
+                            "Gagal update: " + e.getMessage(),
+                            Toast.LENGTH_SHORT).show();
+                });
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        startActivity(new Intent(getApplicationContext(), Admin.class));
+        finish();
     }
 }
