@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
@@ -23,6 +24,7 @@ import com.apps.logindanregisterfirebase.Entitas.User;
 import com.apps.logindanregisterfirebase.MainActivity;
 import com.apps.logindanregisterfirebase.R;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -31,9 +33,8 @@ import java.util.regex.Pattern;
 
 public class Register extends AppCompatActivity {
     private EditText etUsername, etEmail, etPassword, etConfirmPassword, etNoHp, etSecretCode;
-    private Button btnRegister;
+    private Button btnRegister, btnCancel;
     private ProgressBar progressBar;
-    private TextView tvLogin;
     private FirebaseAuth mAuth;
     private DatabaseReference databaseRef;
 
@@ -64,9 +65,10 @@ public class Register extends AppCompatActivity {
         etConfirmPassword = findViewById(R.id.etConfirmPassword);
         etNoHp = findViewById(R.id.etNoHp);
         btnRegister = findViewById(R.id.btnRegister);
+        btnCancel = findViewById(R.id.btnCancel);
         progressBar = findViewById(R.id.progressBar);
         etSecretCode = findViewById(R.id.etSecretCode);
-        tvLogin = findViewById(R.id.tvLogin);
+        TextView tvLogin = findViewById(R.id.tvLogin);
 
         tvLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,6 +92,16 @@ public class Register extends AppCompatActivity {
                 if (validateInputs(username, email, password, confirmPassword, noHp, secretCode)) {
                     registerUser(username, email, password, noHp, secretCode);
                 }
+            }
+        });
+
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Kembali ke Login
+                Intent intent = new Intent(Register.this, Login.class);
+                startActivity(intent);
+                finish();
             }
         });
     }
@@ -164,6 +176,10 @@ public class Register extends AppCompatActivity {
 
         progressBar.setVisibility(View.VISIBLE);
         btnRegister.setEnabled(false);
+        btnCancel.setEnabled(false);
+
+        // Cek dulu apakah email sudah terdaftar di database kita
+        checkEmailAvailability(username, email, password, noHp);
 
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, task -> {
@@ -202,21 +218,203 @@ public class Register extends AppCompatActivity {
                 });
     }
 
+    private void checkEmailAvailability(final String username, final String email,
+                                        final String password, final String noHp) {
+
+        // Cek di Realtime Database apakah email sudah digunakan
+        databaseRef.orderByChild("email").equalTo(email)
+                .addListenerForSingleValueEvent(new com.google.firebase.database.ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull com.google.firebase.database.DataSnapshot snapshot) {
+                        if (snapshot.exists()) {
+                            // Email sudah ada di database kita
+                            progressBar.setVisibility(View.GONE);
+                            btnRegister.setEnabled(true);
+                            btnCancel.setEnabled(true);
+
+                            showEmailAlreadyRegisteredDialog(email);
+                        } else {
+                            // Email belum ada di database, lanjut ke Firebase Auth
+                            createUserInFirebaseAuth(username, email, password, noHp);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull com.google.firebase.database.DatabaseError error) {
+                        progressBar.setVisibility(View.GONE);
+                        btnRegister.setEnabled(true);
+                        btnCancel.setEnabled(true);
+
+                        Toast.makeText(Register.this,
+                                "Error: " + error.getMessage(),
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private void createUserInFirebaseAuth(final String username, final String email,
+                                          final String password, final String noHp) {
+
+        mAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, task -> {
+                    if (task.isSuccessful()) {
+                        // Registration success di Firebase Auth
+                        FirebaseUser firebaseUser = mAuth.getCurrentUser();
+
+                        if (firebaseUser != null) {
+                            String userId = firebaseUser.getUid();
+
+                            // Create User object
+                            User user = new User(userId, username, email, noHp);
+                            user.setRole("user");
+                            user.setStatus(0); // pending activation
+
+                            // Save user to Realtime Database
+                            saveUserToDatabase(user, firebaseUser);
+                        }
+                    } else {
+                        // Registration failed di Firebase Auth
+                        progressBar.setVisibility(View.GONE);
+                        btnRegister.setEnabled(true);
+                        btnCancel.setEnabled(true);
+
+                        handleRegistrationError(task.getException(), email);
+                    }
+                });
+    }
+
+    private void saveUserToDatabase(User user, FirebaseUser firebaseUser) {
+        databaseRef.child(user.getUid()).setValue(user)
+                .addOnCompleteListener(dbTask -> {
+                    progressBar.setVisibility(View.GONE);
+                    btnRegister.setEnabled(true);
+                    btnCancel.setEnabled(true);
+
+                    if (dbTask.isSuccessful()) {
+                        // Send email verification
+                        sendEmailVerification(firebaseUser, user.getUsername(), user.getEmail());
+                    } else {
+                        // Jika gagal save ke database, hapus user dari Firebase Auth
+                        firebaseUser.delete()
+                                .addOnCompleteListener(deleteTask -> {
+                                    if (!deleteTask.isSuccessful()) {
+                                        mAuth.signOut();
+                                    }
+                                });
+
+                        Toast.makeText(Register.this,
+                                "Gagal menyimpan data user: " + dbTask.getException().getMessage(),
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private void handleRegistrationError(Exception exception, String email) {
+        String errorMessage = exception != null ? exception.getMessage() : "Unknown error";
+
+        if (exception instanceof FirebaseAuthUserCollisionException) {
+            // Email sudah digunakan di Firebase Auth
+            showEmailInUseDialog(email, errorMessage);
+        } else {
+            // Error lainnya
+            Toast.makeText(Register.this,
+                    "Registrasi gagal: " + errorMessage,
+                    Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void showEmailAlreadyRegisteredDialog(String email) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Email Sudah Terdaftar")
+                .setMessage("Email " + email + " sudah terdaftar di sistem kami.\n\n" +
+                        "Silakan gunakan email lain atau login dengan email ini.")
+                .setPositiveButton("Login", (dialog, which) -> {
+                    // Redirect ke Login dengan email pre-filled
+                    Intent intent = new Intent(Register.this, Login.class);
+                    intent.putExtra("email", email);
+                    startActivity(intent);
+                    finish();
+                })
+                .setNegativeButton("Gunakan Email Lain", (dialog, which) -> {
+                    // Clear email field
+                    etEmail.setText("");
+                    etEmail.requestFocus();
+                })
+                .setNeutralButton("Batal", null)
+                .setCancelable(true)
+                .show();
+    }
+
+    private void showEmailInUseDialog(String email, String errorMessage) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Email Sudah Digunakan")
+                .setMessage("Email " + email + " sudah digunakan di Firebase Authentication.\n\n" +
+                        "Kemungkinan:\n" +
+                        "1. User dihapus dari database tapi masih ada di Auth\n" +
+                        "2. Email memang sudah terdaftar\n\n" +
+                        "Error: " + errorMessage)
+                .setPositiveButton("Reset Password", (dialog, which) -> {
+                    // Kirim reset password email
+                    sendPasswordResetEmail(email);
+                })
+                .setNegativeButton("Gunakan Email Lain", (dialog, which) -> {
+                    // Clear email field
+                    etEmail.setText("");
+                    etEmail.requestFocus();
+                })
+                .setNeutralButton("Batal", null)
+                .setCancelable(true)
+                .show();
+    }
+
+    private void sendPasswordResetEmail(String email) {
+        mAuth.sendPasswordResetEmail(email)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Toast.makeText(Register.this,
+                                "Instruksi reset password telah dikirim ke " + email,
+                                Toast.LENGTH_LONG).show();
+
+                        // Redirect ke Login
+                        Intent intent = new Intent(Register.this, Login.class);
+                        intent.putExtra("email", email);
+                        startActivity(intent);
+                        finish();
+                    } else {
+                        Toast.makeText(Register.this,
+                                "Gagal mengirim email reset: " + task.getException().getMessage(),
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    // Di Register.java - Update method sendEmailVerification()
     private void sendEmailVerification(FirebaseUser user, String username, String email) {
         user.sendEmailVerification()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        showVerificationDialog(username, email);
+                        // Redirect ke Email Verification Activity
+                        Intent intent = new Intent(Register.this, EmailVerificationActivity.class);
+                        intent.putExtra("email", email);
+                        intent.putExtra("username", username);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                        finish();
                     } else {
                         Toast.makeText(Register.this,
                                 "Gagal mengirim email verifikasi: " + task.getException().getMessage(),
                                 Toast.LENGTH_SHORT).show();
 
-                        // Still show success but warn about verification
-                        showVerificationWarningDialog(username, email);
+                        // Fallback: langsung ke login dengan warning
+                        Intent intent = new Intent(Register.this, Login.class);
+                        intent.putExtra("email", email);
+                        intent.putExtra("need_verification", true);
+                        startActivity(intent);
+                        finish();
                     }
                 });
     }
+    // Juga perbaiki showVerificationDialog() dan showVerificationWarningDialog() untuk redirect ke EmailVerificationActivity
 
     private void showVerificationDialog(String username, String email) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -265,5 +463,15 @@ public class Register extends AppCompatActivity {
             startActivity(intent);
             finish();
         }
+    }
+
+    @SuppressLint("GestureBackNavigation")
+    @Override
+    public void onBackPressed() {
+        // Override back button untuk mencegah stuck
+        super.onBackPressed();
+        Intent intent = new Intent(this, Login.class);
+        startActivity(intent);
+        finish();
     }
 }

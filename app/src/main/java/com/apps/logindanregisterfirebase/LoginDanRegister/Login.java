@@ -181,18 +181,21 @@ public class Login extends AppCompatActivity {
                 });
     }
 
+    // Di Login.java - Update method checkEmailVerification()
     private void checkEmailVerification(FirebaseUser user) {
         if (user.isEmailVerified()) {
-            // Email verified, check user role in database
+            // Email verified, check user role
             checkUserRole(user.getUid(), user.getEmail());
         } else {
-            // Email not verified
+            // Email not verified - redirect to verification activity
             Toast.makeText(Login.this,
-                    "Email belum diverifikasi. Silakan cek email Anda.",
-                    Toast.LENGTH_LONG).show();
+                    "Email belum diverifikasi. Mengarahkan ke halaman verifikasi...",
+                    Toast.LENGTH_SHORT).show();
 
-            // Optionally, you can offer to resend verification email
-            mAuth.signOut();
+            Intent intent = new Intent(Login.this, EmailVerificationActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+            finish();
         }
     }
 

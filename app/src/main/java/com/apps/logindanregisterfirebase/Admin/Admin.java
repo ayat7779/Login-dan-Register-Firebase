@@ -148,4 +148,29 @@ public class Admin extends AppCompatActivity {
             finish();
         }
     }
+
+    // Di Admin.java - Tambah method refresh data
+    private void refreshUserList() {
+        if (adapter != null) {
+            tampilData(); // Load ulang data dari Firebase
+        }
+    }
+
+    // Atau di onResume()
+    @Override
+    protected void onResume() {
+        super.onResume();
+        refreshUserList();
+    }
+
+    // Di Admin.java - tambah method
+    private void showDeleteWarning() {
+        Toast.makeText(this,
+                "PERHATIAN: Menghapus user dari database TIDAK menghapus dari Firebase Auth.\n" +
+                        "User tidak bisa daftar ulang dengan email yang sama.",
+                Toast.LENGTH_LONG).show();
+    }
+
+    // Panggil sebelum hapus
+    // showDeleteWarning();
 }

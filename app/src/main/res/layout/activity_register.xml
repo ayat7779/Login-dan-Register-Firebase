@@ -133,18 +133,35 @@
             android:visibility="gone"
             android:layout_marginBottom="16dp"/>
 
-        <!-- Register Button -->
-        <Button
-            android:id="@+id/btnRegister"
+        <!-- Tambahkan di layout, sebelum Login Link -->
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="DAFTAR"
-            android:textAllCaps="false"
-            android:textSize="16sp"
-            android:backgroundTint="@color/primary"
-            android:textColor="@color/white"
-            android:layout_marginBottom="16dp"
-            tools:ignore="HardcodedText" />
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginBottom="16dp">
+
+            <Button
+                android:id="@+id/btnCancel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="BATAL"
+                android:layout_marginEnd="8dp"
+                android:backgroundTint="@color/gray"
+                android:textColor="@color/white"/>
+
+            <Button
+                android:id="@+id/btnRegister"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="DAFTAR"
+                android:layout_marginStart="8dp"
+                android:backgroundTint="@color/primary"
+                android:textColor="@color/white"/>
+
+        </LinearLayout>
 
         <!-- Login Link -->
         <LinearLayout
@@ -176,11 +193,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Password harus mengandung:\n
-                          • Minimal 8 karakter\n
-                          • 1 huruf besar\n
-                          • 1 huruf kecil\n
-                          • 1 angka"
+            android:text="Password harus mengandung:\n• Minimal 8 karakter\n• 1 huruf besar\n• 1 huruf kecil\n• 1 angka"
             android:textSize="12sp"
             android:textColor="@color/gray"
             android:layout_marginTop="16dp"

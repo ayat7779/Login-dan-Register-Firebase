@@ -14,6 +14,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.apps.logindanregisterfirebase.R;
+import com.apps.logindanregisterfirebase.Utils.SessionManager;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -108,29 +109,39 @@ public class EditDataUser extends AppCompatActivity {
         });
     }
 
+    // Di EditDataUser.java - Tambah validasi
     private void updateUserData(String usernameBaru, String noHpBaru) {
+        // Cek apakah ini admin yang sedang login
+        SessionManager sessionManager = new SessionManager(this);
+        String currentUserId = sessionManager.getUserId();
+
+        // Jika admin mengedit akun sendiri, beberapa field tidak boleh diubah
+        if (uid != null && uid.equals(currentUserId)) {
+            // Admin tidak bisa mengubah role sendiri
+            Toast.makeText(this,
+                    "Beberapa pengubahan dibatasi untuk akun sendiri",
+                    Toast.LENGTH_SHORT).show();
+        }
+
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("username", usernameBaru);
         hashMap.put("noHp", noHpBaru);
 
         database.child(uid).updateChildren(hashMap)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Toast.makeText(getApplicationContext(),
-                                "Data user berhasil diupdate!",
-                                Toast.LENGTH_SHORT).show();
-
-                        Intent intent = new Intent(getApplicationContext(), Admin.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        startActivity(intent);
-                        finish();
-                    }
-                })
-                .addOnFailureListener(e -> {
+                .addOnSuccessListener(aVoid -> {
                     Toast.makeText(getApplicationContext(),
-                            "Gagal update: " + e.getMessage(),
+                            "Data user berhasil diupdate!",
                             Toast.LENGTH_SHORT).show();
+
+                    // Update session jika ini admin yang sedang login
+                    if (uid.equals(currentUserId)) {
+                        sessionManager.updateUserProfile(usernameBaru, noHpBaru);
+                    }
+
+                    Intent intent = new Intent(getApplicationContext(), Admin.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                    finish();
                 });
     }
 

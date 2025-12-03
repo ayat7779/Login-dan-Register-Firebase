@@ -11,4 +11,8 @@
         <color name="warning">#FF9800</color>
         <color name="error">#F44336</color>
 
+    <color name="light_blue">#E3F2FD</color>
+    <color name="light_green">#E8F5E9</color>
+    <color name="light_red">#FFEBEE</color>
+
 </resources>
