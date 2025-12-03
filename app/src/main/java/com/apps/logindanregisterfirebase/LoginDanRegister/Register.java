@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -32,7 +33,7 @@ public class Register extends AppCompatActivity {
     private EditText etUsername, etEmail, etPassword, etConfirmPassword, etNoHp, etSecretCode;
     private Button btnRegister;
     private ProgressBar progressBar;
-
+    private TextView tvLogin;
     private FirebaseAuth mAuth;
     private DatabaseReference databaseRef;
 
@@ -65,6 +66,16 @@ public class Register extends AppCompatActivity {
         btnRegister = findViewById(R.id.btnRegister);
         progressBar = findViewById(R.id.progressBar);
         etSecretCode = findViewById(R.id.etSecretCode);
+        tvLogin = findViewById(R.id.tvLogin);
+
+        tvLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent login = new Intent(Register.this, Login.class);
+                startActivity(login);
+                finish();
+            }
+        });
 
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -3,11 +3,8 @@ package com.apps.logindanregisterfirebase.Admin;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
-
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -18,7 +15,6 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.apps.logindanregisterfirebase.Entitas.User;
 import com.apps.logindanregisterfirebase.LoginDanRegister.Login;
 import com.apps.logindanregisterfirebase.R;
@@ -29,17 +25,14 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Admin extends AppCompatActivity {
-    private ImageView ivKeluar;
     private RecyclerView rvUser;
     private DatabaseReference database;
     private UserAdapter adapter;
     private ArrayList<User> arrayList;
-
     private SessionManager sessionManager;
     private FirebaseAuth mAuth;
 
@@ -68,18 +61,15 @@ public class Admin extends AppCompatActivity {
 
         // Setup views
         rvUser = findViewById(R.id.rvUser);
-        ivKeluar = findViewById(R.id.ivKeluar);
+        ImageView ivKeluar = findViewById(R.id.ivKeluar);
 
-        ivKeluar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // Logout
-                sessionManager.logoutUser();
-                mAuth.signOut();
-                Intent intent = new Intent(Admin.this, Login.class);
-                startActivity(intent);
-                finish();
-            }
+        ivKeluar.setOnClickListener(view -> {
+            // Logout
+            sessionManager.logoutUser();
+            mAuth.signOut();
+            Intent intent = new Intent(Admin.this, Login.class);
+            startActivity(intent);
+            finish();
         });
 
         // Initialize Firebase
@@ -133,16 +123,12 @@ public class Admin extends AppCompatActivity {
                     updates.put("status", 1);
 
                     userRef.updateChildren(updates)
-                            .addOnSuccessListener(aVoid -> {
-                                Toast.makeText(Admin.this,
-                                        user.getUsername() + " sekarang adalah admin",
-                                        Toast.LENGTH_SHORT).show();
-                            })
-                            .addOnFailureListener(e -> {
-                                Toast.makeText(Admin.this,
-                                        "Gagal: " + e.getMessage(),
-                                        Toast.LENGTH_SHORT).show();
-                            });
+                            .addOnSuccessListener(aVoid -> Toast.makeText(Admin.this,
+                                    user.getUsername() + " sekarang adalah admin",
+                                    Toast.LENGTH_SHORT).show())
+                            .addOnFailureListener(e -> Toast.makeText(Admin.this,
+                                    "Gagal: " + e.getMessage(),
+                                    Toast.LENGTH_SHORT).show());
                 })
                 .setNegativeButton("Tidak", null)
                 .show();

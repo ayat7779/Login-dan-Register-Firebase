@@ -107,15 +107,6 @@
                 android:maxLines="1"/>
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Progress Bar -->
-        <ProgressBar
-            android:id="@+id/progressBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:visibility="gone"
-            android:layout_marginBottom="16dp"/>
-
         <!-- Tambah sebelum tombol Daftar -->
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
@@ -133,6 +124,15 @@
                 tools:ignore="HardcodedText" />
         </com.google.android.material.textfield.TextInputLayout>
 
+        <!-- Progress Bar -->
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            android:layout_marginBottom="16dp"/>
+
         <!-- Register Button -->
         <Button
             android:id="@+id/btnRegister"
@@ -143,7 +143,8 @@
             android:textSize="16sp"
             android:backgroundTint="@color/primary"
             android:textColor="@color/white"
-            android:layout_marginBottom="16dp"/>
+            android:layout_marginBottom="16dp"
+            tools:ignore="HardcodedText" />
 
         <!-- Login Link -->
         <LinearLayout
@@ -156,7 +157,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Sudah punya akun? "
-                android:textColor="@color/black"/>
+                android:textColor="@color/black"
+                tools:ignore="HardcodedText" />
 
             <TextView
                 android:id="@+id/tvLogin"
@@ -166,17 +168,23 @@
                 android:textColor="@color/primary"
                 android:textStyle="bold"
                 android:clickable="true"
-                android:focusable="true"/>
+                android:focusable="true"
+                tools:ignore="HardcodedText" />
         </LinearLayout>
 
         <!-- Password Requirements Info -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Password harus mengandung:\n• Minimal 8 karakter\n• 1 huruf besar\n• 1 huruf kecil\n• 1 angka"
+            android:text="Password harus mengandung:\n
+                          • Minimal 8 karakter\n
+                          • 1 huruf besar\n
+                          • 1 huruf kecil\n
+                          • 1 angka"
             android:textSize="12sp"
             android:textColor="@color/gray"
-            android:layout_marginTop="16dp"/>
+            android:layout_marginTop="16dp"
+            tools:ignore="HardcodedText" />
 
     </LinearLayout>
 </ScrollView>
