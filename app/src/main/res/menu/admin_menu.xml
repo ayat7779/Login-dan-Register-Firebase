@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_auth_users"
+        android:icon="@android:drawable/ic_menu_manage"
+        android:title="Auth Users"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/action_sync"
+        android:icon="@android:drawable/ic_menu_upload"
+        android:title="Sync"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/action_logout"
+        android:icon="@android:drawable/ic_lock_power_off"
+        android:title="Logout"
+        app:showAsAction="ifRoom"/>
+
+</menu>

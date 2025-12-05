@@ -37,4 +37,17 @@
         android:layout_marginTop="-6dp"
         android:layout_marginEnd="10dp"
         tools:listitem="@layout/list_user" />
+
+    <Button
+        android:id="@+id/btnCekEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rvUser"
+        android:text="Cek Email"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:textSize="20sp"
+        tools:ignore="HardcodedText" />
 </RelativeLayout>

@@ -14,11 +14,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.apps.logindanregisterfirebase.Entitas.User;
 import com.apps.logindanregisterfirebase.R;
+import com.apps.logindanregisterfirebase.Utils.CloudFunctionsHelper;
 import com.apps.logindanregisterfirebase.Utils.SessionManager;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.List;
+import java.util.Map;
 
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.MyViewHolder> {
     List<User> mlist;
@@ -249,7 +251,6 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.MyViewHolder> 
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-
         private TextView tvUsername, tvEmail, tvNoHp, tvStatus, tvRole;
         private Button btnHapus, btnEdit, btnAktifasi, btnPromote;
 
@@ -268,33 +269,52 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.MyViewHolder> 
         }
     }
 
-    private void deleteUser(User user) {
-        // Hapus dari Firebase Auth terlebih dahulu
-        // Butuh Cloud Function atau admin SDK untuk ini
-        // Untuk sekarang, hanya hapus dari database dan beri warning
-
+    // Di UserAdapter.java - update deleteUser method
+    private void deleteUser(final User user) {
+        // Konfirmasi dialog
         android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(context);
         builder.setTitle("Hapus User")
                 .setMessage("Hapus user " + user.getUsername() + "?\n\n" +
-                        "⚠️ PERHATIAN:\n" +
-                        "User akan dihapus dari database, tapi EMAIL MASIH TERDAFTAR di Firebase Auth.\n" +
-                        "User tidak bisa daftar ulang dengan email yang sama sampai dihapus manual dari Firebase Console.")
+                        "User akan dihapus dari:\n" +
+                        "✓ Database\n" +
+                        "✓ Firebase Authentication")
                 .setPositiveButton("Ya, Hapus", (dialog, which) -> {
-                    // Hapus dari database
+                    // Step 1: Hapus dari database
                     database.child(user.getUid()).removeValue()
                             .addOnSuccessListener(aVoid -> {
-                                Toast.makeText(context,
-                                        "User dihapus dari database.\n" +
-                                                "Email masih terdaftar di Firebase Auth.",
-                                        Toast.LENGTH_LONG).show();
+                                // Step 2: Hapus dari Firebase Auth via Cloud Function
+                                deleteUserFromAuth(user.getUid(), user.getUsername());
                             })
                             .addOnFailureListener(e -> {
                                 Toast.makeText(context,
-                                        "Gagal menghapus: " + e.getMessage(),
+                                        "Gagal menghapus dari database: " + e.getMessage(),
                                         Toast.LENGTH_SHORT).show();
                             });
                 })
                 .setNegativeButton("Batal", null)
                 .show();
+    }
+
+    private void deleteUserFromAuth(String userId, String username) {
+        CloudFunctionsHelper helper = CloudFunctionsHelper.getInstance(context);
+
+        helper.deleteUserFromAuth(userId, new CloudFunctionsHelper.OnCompleteListener() {
+            @Override
+            public void onComplete(boolean success, Map<String, Object> result) {
+                if (success) {
+                    Toast.makeText(context,
+                            "User " + username + " berhasil dihapus dari database dan Auth",
+                            Toast.LENGTH_SHORT).show();
+                } else {
+                    String message = result != null && result.containsKey("message")
+                            ? result.get("message").toString()
+                            : "Gagal menghapus dari Auth";
+
+                    Toast.makeText(context,
+                            "User dihapus dari database, tapi: " + message,
+                            Toast.LENGTH_LONG).show();
+                }
+            }
+        });
     }
 }

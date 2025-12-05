@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    tools:context=".Admin.DuplicateManagerActivity">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Duplicate Email Manager"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:layout_marginBottom="24dp"
+        tools:ignore="HardcodedText" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <TextView
+            android:id="@+id/tvDuplicates"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Loading duplicates..."
+            android:textSize="16sp"
+            android:lineSpacingExtra="8dp"
+            tools:ignore="HardcodedText" />
+
+    </ScrollView>
+
+    <Button
+        android:id="@+id/btnScan"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Scan for Duplicates"
+        android:layout_marginTop="16dp"
+        tools:ignore="HardcodedText" />
+
+    <Button
+        android:id="@+id/btnCleanup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Clean Up"
+        android:layout_marginTop="16dp"
+        tools:ignore="HardcodedText" />
+
+</LinearLayout>

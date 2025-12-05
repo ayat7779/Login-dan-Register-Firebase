@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:fillViewport="true"
+    tools:context=".LoginDanRegister.PhoneVerificationActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <!-- Header -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Verifikasi Nomor Telepon"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="@color/primary"
+            android:layout_marginBottom="24dp"
+            android:gravity="center"
+            tools:ignore="HardcodedText" />
+
+        <!-- Illustration -->
+        <ImageView
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_phone_verify"
+            android:layout_marginBottom="24dp"
+            android:contentDescription="Phone verification icon"
+            tools:ignore="HardcodedText" />
+
+        <!-- Description -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Verifikasi nomor telepon untuk keamanan tambahan"
+            android:textSize="16sp"
+            android:textColor="@color/black"
+            android:layout_marginBottom="32dp"
+            android:gravity="center"
+            tools:ignore="HardcodedText" />
+
+        <!-- Phone Input Card -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="2dp"
+            android:layout_marginBottom="24dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Masukkan Nomor Telepon"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="12dp"
+                    tools:ignore="HardcodedText" />
+
+                    <!-- Country Code Picker -->
+                    <com.hbb20.CountryCodePicker
+                        android:id="@+id/ccp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:ccp_showFullName="false"
+                        app:ccp_showNameCode="true"
+                        app:ccp_showPhoneCode="true"
+                        app:ccp_showArrow="true"
+                        android:layout_marginBottom="12dp"/>
+
+                    <!-- Phone Number Input -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:errorEnabled="true">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etPhoneNumber"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Nomor telepon"
+                            android:inputType="phone"
+                            android:maxLines="1"
+                            tools:ignore="HardcodedText" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Verification Code Input (Initially hidden) -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardVerificationCode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="2dp"
+                android:layout_marginBottom="16dp"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Masukkan Kode Verifikasi"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="12dp"
+                        tools:ignore="HardcodedText" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:errorEnabled="true">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etVerificationCode"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="6-digit code"
+                            android:inputType="number"
+                            android:maxLines="1"
+                            android:maxLength="6"
+                            tools:ignore="HardcodedText" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Countdown Timer -->
+            <TextView
+                android:id="@+id/tvCountdown"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Kode kadaluarsa dalam: 60 detik"
+                android:textSize="14sp"
+                android:textColor="@color/warning"
+                android:visibility="gone"
+                android:layout_marginBottom="16dp"
+                android:gravity="center"
+                tools:ignore="HardcodedText" />
+
+            <!-- Resend Link -->
+            <TextView
+                android:id="@+id/tvResend"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Kirim ulang kode"
+                android:textSize="14sp"
+                android:textColor="@color/primary"
+                android:textStyle="bold"
+                android:visibility="gone"
+                android:layout_marginBottom="16dp"
+                android:gravity="center"
+                android:clickable="true"
+                android:focusable="true"
+                tools:ignore="HardcodedText" />
+
+            <!-- Progress Bar -->
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:visibility="gone"
+                android:layout_marginBottom="16dp"/>
+
+            <!-- Action Buttons -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="8dp">
+
+                <Button
+                    android:id="@+id/btnSendCode"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Kirim Kode"
+                    android:layout_marginEnd="8dp"
+                    android:backgroundTint="@color/primary"
+                    android:textColor="@color/white"
+                    tools:ignore="HardcodedText" />
+
+                <Button
+                    android:id="@+id/btnVerify"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Verifikasi"
+                    android:layout_marginStart="8dp"
+                    android:backgroundTint="@color/success"
+                    android:textColor="@color/white"
+                    android:visibility="gone"
+                    tools:ignore="HardcodedText" />
+
+            </LinearLayout>
+
+            <!-- Skip Button -->
+            <Button
+                android:id="@+id/btnSkip"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Lewati untuk sekarang"
+                android:backgroundTint="@color/gray"
+                android:textColor="@color/white"
+                android:visibility="gone"
+                tools:ignore="HardcodedText" />
+
+            <!-- Info Text -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="• Kode akan dikirim via SMS\n• Biaya SMS sesuai operator\n• Verifikasi untuk keamanan akun"
+                android:textSize="12sp"
+                android:textColor="@color/gray"
+                android:layout_marginTop="24dp"
+                tools:ignore="HardcodedText" />
+
+        </LinearLayout>
+    </ScrollView>

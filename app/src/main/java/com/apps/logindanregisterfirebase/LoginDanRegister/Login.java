@@ -35,7 +35,6 @@ import com.google.firebase.database.ValueEventListener;
 public class Login extends AppCompatActivity {
     private EditText etEmail, etPassword;
     private Button btnLogin;
-    private TextView tvRegister, tvForgotPassword;
     private CheckBox cbRememberMe;
     private ProgressBar progressBar;
 
@@ -73,8 +72,8 @@ public class Login extends AppCompatActivity {
         etEmail = findViewById(R.id.etEmail);
         etPassword = findViewById(R.id.etPassword);
         btnLogin = findViewById(R.id.btnLogin);
-        tvRegister = findViewById(R.id.tvRegister);
-        tvForgotPassword = findViewById(R.id.tvForgotPassword);
+        TextView tvRegister = findViewById(R.id.tvRegister);
+        TextView tvForgotPassword = findViewById(R.id.tvForgotPassword);
         cbRememberMe = findViewById(R.id.cbRememberMe);
         progressBar = findViewById(R.id.progressBar);
 

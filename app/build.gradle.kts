@@ -42,6 +42,8 @@ dependencies {
     implementation(libs.recyclerview)
     implementation(libs.fragment)
     implementation(libs.firebase.database)
+    implementation(libs.firebase.firestore)
+    implementation(libs.firebase.perf)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
@@ -49,6 +51,11 @@ dependencies {
     // Firebase dependencies
     implementation (libs.firebase.auth)
     implementation (libs.firebase.database.v2030)
+    implementation(libs.firebase.functions)
 
+    // Untuk otomatis baca SMS (opsional)
+    implementation(libs.play.services.auth.api.phone)
 
+    // Country Code Picker
+    implementation(libs.ccp)
 }
